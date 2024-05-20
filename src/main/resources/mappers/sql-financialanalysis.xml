@@ -103,16 +103,15 @@
 		   SELECT BUYER_ID
 				, YEAR
 				, SEQ
-				, ITEM_NM
+				, REPLACE(ITEM_NM,CHR(10),'<![CDATA[<BR>]]>') AS ITEM_NM
 				, CONSULT_MSG
 				, CHECK_YN
 				, UPDATE_USER
 				, UPDATE_DATE
 		   FROM TBL_EXP_FIN_ANAL_RESULT
   		  WHERE BUYER_ID = #{BUYER_ID}
-  		    AND (YEAR <![CDATA[<]]> TO_CHAR(SYSDATE,'YYYY') 
-  		    AND  YEAR <![CDATA[>=]]> TO_CHAR(SYSDATE + (365*3),'YYYY'))
-  		  ORDER BY YEAR, SEQ
+  		    AND YEAR = (SELECT MAX(YEAR) FROM TBL_EXP_FIN_ANAL_RESULT WHERE BUYER_ID = #{BUYER_ID})
+  		  ORDER BY SEQ
 	</select>
 	<!--
 	재무상태표,손익계산서, 주요경비율, 인건비 분석
