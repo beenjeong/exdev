@@ -185,7 +185,9 @@
 				if( <@pageId>.recvData.USER_ID == G_VAL.session.USER_ID){
 					$("#userImg").attr("src","../img/picture/picture"+PIC_NUM+".png");
 				}
-			}		
+			}
+
+			$("#loginUserNm").text(G_VAL.session.etcUserInfo.USER_NM );
 		}
 		,education : (clickedData) => {
 

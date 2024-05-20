@@ -72,10 +72,20 @@
 		<@popupId>.recvData		= parm;
 		<@popupId>.USER_ID 		= parm.USER_ID;
 		<@popupId>.FILE_PATH 	= parm.filePath;
+		_getImageFile("<@popupId>_userImg",{GRP_FILE_ID:<@popupId>.USER_ID , OWNER_CD:"USER_FACE" },function(){
+			debugger;
+			if( $("#<@popupId>_userImg").attr("src") == ".." ){
+				
+				$("#<@popupId>_selectMyImg button").empty();
+				$("#<@popupId>_selectMyImg button").append("사진 변경<br>클릭!");
+			}
+			
+			if( parm.PIC_NUM ){
+				$('#<@popupId>_radio_list0'+parm.PIC_NUM).prop('checked', true);
+			}
+			
+		});
 		
-		if( parm.PIC_NUM ){
-			$('#<@popupId>_radio_list0'+parm.PIC_NUM).prop('checked', true);
-		}
 		
 		C_COMP.import("fileuploadComp", "component_compFilemng",{hide : "Y"} , function(fileId) {});
 	});
@@ -125,8 +135,12 @@
 						</figure>
 						<input type="radio" name="<@popupId>_photo" id="<@popupId>_radio_list06">
 					</li>
-					<li>
-						<button class="btn" onclick='<@popupId>.regPhoto();'>사진 변경<br>클릭!</button>
+					<li id="<@popupId>_selectMyImg">
+							<button class="btn" onclick='<@popupId>.regPhoto();'>						
+								<figure class="photo_wrap" style="margin-left:-13px;">
+									<img src=".."  id="<@popupId>_userImg">
+								</figure>
+							</button>
 						<input type="radio" name="<@popupId>_photo" id="<@popupId>_radio_list00" value='addReg'>
 					</li>
 				</ul>

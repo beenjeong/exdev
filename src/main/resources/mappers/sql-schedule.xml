@@ -668,10 +668,10 @@
     <select id="getTeamNotRepeat" resultType="java.util.HashMap" flushCache="true"  useCache="false">
         /* schedule.getTeamNotRepeat */
         WITH TABLE_DATE AS ( 
-            SELECT TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL , 'YYYY-MM-DD') DTE
-                  ,TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL , 'DAY') DAY
-                  ,TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL , 'DY') DY
-                  ,TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL , 'D') D
+            SELECT TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL -1 , 'YYYY-MM-DD') DTE
+                  ,TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL -1 , 'DAY') DAY
+                  ,TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL -1 , 'DY') DY
+                  ,TO_CHAR( TO_DATE(#{minusDate},'YYYY-MM-DD') + LEVEL -1 , 'D') D
             FROM   DUAL 
             CONNECT BY LEVEL  <![CDATA[<=]]>  TO_DATE(#{plusDate},'YYYY-MM-DD') - TO_DATE(#{minusDate},'YYYY-MM-DD')
         )

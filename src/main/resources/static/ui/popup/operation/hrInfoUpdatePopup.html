@@ -23,6 +23,14 @@
 				C_UICOM.makeSelectBox({ 
 					 		 data : data
 					 		,targetId : "<@popupId>_selectSysRole" }, "single");
+				//시스템 ROLE 세팅.
+ 				C_UICOM.setSingleBox("<@popupId>_selectSysRole", <@popupId>.recvData.param.ROLE_ID || 'USER');
+				
+ 				if("<@myInfo>"=="Y" ){
+ 					
+ 					C_UICOM.setSelectBoxOption("<@popupId>_selectSysRole", "readOnly", "Y")
+ 				}
+
 			});
 	
 			C_UICOM.makeSelectBox({ 
@@ -182,11 +190,11 @@
 
 			switch(key)
 			{
-				case "GENDER"				: selectId ="<@popupId>_selectGender";break;
-				case "SURETY_INSURANCE"		: selectId ="<@popupId>_selectSuretyIns";break;
-				case "POSITION"				: selectId ="<@popupId>_selectPosition";break;
-				case "GRADE"				: selectId ="<@popupId>_selectGrade";break;
-				case "SALES_TYPE"			: selectId ="<@popupId>_selectSalesType";break;
+				case "GENDER"				: selectId ="<@popupId>_selectGender";C_UICOM.setSelectBoxOption(selectId, "readOnly", "N");break;
+				case "SURETY_INSURANCE"		: {selectId ="<@popupId>_selectSuretyIns";	"<@myInfo>"=="Y" ? C_UICOM.setSelectBoxOption(selectId, "readOnly", "Y") : ''}break;
+				case "POSITION"				: {selectId ="<@popupId>_selectPosition";	"<@myInfo>"=="Y" ? C_UICOM.setSelectBoxOption(selectId, "readOnly", "Y") : ''}break;
+				case "GRADE"				: {selectId ="<@popupId>_selectGrade";		"<@myInfo>"=="Y" ? C_UICOM.setSelectBoxOption(selectId, "readOnly", "Y") : ''}break;
+				case "SALES_TYPE"			: {selectId ="<@popupId>_selectSalesType"; 	"<@myInfo>"=="Y" ? C_UICOM.setSelectBoxOption(selectId, "readOnly", "Y") : ''}break;
 				default:
 			}
 			
@@ -416,8 +424,10 @@
 		
 		<@popupId>.mode = <@popupId>.recvData.mode;
 
-		if( data.param.PIC_NUM)
+		if( data.param.PIC_NUM){
 			<@popupId>.setImage(data.param.PIC_NUM);
+			<@popupId>.PIC_NUM = data.param.PIC_NUM;
+		}
 
 		<@popupId>.setComponent();
 		
@@ -427,19 +437,25 @@
 		
 		if("<@myInfo>"=="Y"){
 			
-			$("#<@popupId>_applyBtn").hide();
-			$("#<@popupId>_userImg+button").hide();
 			$("#<@popupId>_USER_ID+button").hide();
 			$("#<@popupId>_USER_ID").css("width","100%");
-			$("#<@popupId> .tit").html( "내정보 보기" );
+			$("#<@popupId> .tit").html( "내 정보 보기" );
+			$("#<@popupId>_items .info_wrap input").not("[id*='<@popupId>_select']").prop("disabled",true);
+
+			//이름/ 핸드폰 / 주민번호 / 성별 / 이메일 / 주소  / DESC // 추천인
+			$("#<@popupId>_USER_NM,#<@popupId>_PHONE_NUM,#<@popupId>_JUMIN")					.prop("disabled",false);
+			$("#<@popupId>_E_MAIL,#<@popupId>_POST_NUM,#<@popupId>_ADDR1,#<@popupId>_ADDR2")	.prop("disabled",false);
+			$("#<@popupId><@popupId>_RECOMMENDER_val,#<@popupId>_USER_DESC")					.prop("disabled",false);
+			
+			C_UICOM.setSelectBoxOption("<@popupId>_selectGender", "readOnly", "N");// 성별
+			
+			$("#<@popupId>_divisionPopupBtn").remove();
+			$("#<@popupId>_DIVISION").css("width", "100%");
+			
+			setTimeout( () =>{$(".ui-datepicker-trigger").remove();},150)
 			
 		}
 
- 		setTimeout( () =>{
- 			
-			C_UICOM.setSingleBox("<@popupId>_selectSysRole", data.param.ROLE_ID || 'USER');
-			
-		},100)
 	});
 </script>
 
@@ -463,7 +479,7 @@
 			<div class="clearFix mt15" style="height:160px;">
 				<figure class="photo_wrap fl mr15" >
 					<img src="../img/icon_noimg.png" id="<@popupId>_userImg">
-					<button class="btn mt5 w100 small" onclick="<@popupId>.selectImage()">사진변경</button>
+					<button class="btn mt5 w100 small" onclick="<@popupId>.selectImage()">사진선택</button>
 				</figure>
 				
 				<ul class="info_wrap col2">
@@ -563,7 +579,7 @@
 						<div class="info">
 							<input type="text" id="<@popupId>_DIVISION" style="width:calc(86% - 2px)" disabled>
 							<input type="text" id="<@popupId>_DIVISION_ID" style="display:none">
-							<button class="btn" onclick="<@popupId>.divisionPopup();">부서 검색</button>
+							<button class="btn" id="<@popupId>_divisionPopupBtn" onclick="<@popupId>.divisionPopup();">부서 검색</button>
 						</div>
 					</li>
 					<li class="ml0">

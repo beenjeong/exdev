@@ -1598,7 +1598,6 @@
                ,MENU_NM     
                ,GROUP_1     
                ,GROUP_2     
-               ,GROUP_3     
                ,UPDATE_USER 
                ,UPDATE_DATE 
         FROM   TBL_EXP_STORE_MENU_MASTER
@@ -1615,9 +1614,6 @@
         </if>
         <if test=" !'ALL'.equals(group2) and group2 != null and group2 != ''  ">
             AND   GROUP_2  = #{group2}
-        </if>
-        <if test=" !'ALL'.equals(group3) and group3 != null and group3 != ''  ">
-            AND   GROUP_3  = #{group3}
         </if>
         ORDER BY MENU_NM
     </select>

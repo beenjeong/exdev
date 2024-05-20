@@ -249,6 +249,43 @@
    			, S.UPDATE_DATE, S.SURETY_INSURANCE, S.GENDER, S.SALES_TYPE, S.USE_YN, S.DEL_YN, '1234',S.RECOMMENDER_ID,S.DIVISION_ID,S.PIC_NUM)
 	</update>
 	
+	<update id="updateMyHrInfo" parameterType="java.util.HashMap"  flushCache="true" >
+		/*	hrInfo.updateMyHrInfo
+			내 정보 보기 수정
+		*/
+		UPDATE TBL_EXP_USER T
+		SET
+			T.USER_NM 		= #{USER_NM},
+		    T.GENDER 		= #{GENDER},
+		    T.USER_DESC 	= #{USER_DESC},
+		    T.E_MAIL 		= #{E_MAIL},
+		    T.PHONE_NUM 	= #{PHONE_NUM},
+		    T.JUMIN 		= #{JUMIN},
+		    T.POST_NUM 		= #{POST_NUM},
+		    T.ADDR1 		= #{ADDR1},
+		    T.ADDR2 		= #{ADDR2},
+	        <choose>
+		       	<when test="PIC_NUM != null and !PIC_NUM.equals('')"> 
+				T.PIC_NUM		=    #{PIC_NUM},
+				</when>
+		       	<when test="PIC_NUM == null or PIC_NUM.equals('')"> 
+				T.PIC_NUM		=    '1' ,
+				</when>
+			</choose>		         
+	        <choose>
+		       	<when test="RECOMMENDER_ID != null and !RECOMMENDER_ID.equals('')"> 
+				 T.RECOMMENDER_ID = #{RECOMMENDER_ID},
+				</when>
+		       	<when test="RECOMMENDER_ID == null or RECOMMENDER_ID.equals('')"> 
+				 T.RECOMMENDER_ID =  NULL,
+				</when>
+			</choose>		         
+		    T.UPDATE_USER 	= #{sessionVo.userId	},
+		    T.UPDATE_DATE 	= SYSDATE
+		WHERE T.SP_CSTM_ID	= #{sessionVo.spCstmId	}
+		AND T.USER_ID 		= #{sessionVo.userId	}
+		
+	</update>	
 	<delete id="deleteHrInfo" parameterType="java.util.HashMap"  flushCache="true" >
 		/*	hrInfo.deleteHrInfo
 			인사정보  삭제

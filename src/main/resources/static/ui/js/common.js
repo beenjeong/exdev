@@ -262,7 +262,7 @@ function _getBranchSelectData ( callback ) {
 	});
 }
 
-function _getImageFile (targetId , obj ) {
+function _getImageFile (targetId , obj ,fn) {
 
 	// image upload component
 	const USER_ID = obj.GRP_FILE_ID;
@@ -280,10 +280,14 @@ function _getImageFile (targetId , obj ) {
 				
 				G_VAL.session.userImgId = fileId;
 				$("#userImg").attr("src",imgPath);
+				$("#loginUserNm").text(G_VAL.session.etcUserInfo.USER_NM );
 
 			}
-			
 		}
+					
+	    if (typeof fn === 'function') {
+	        fn();
+	    }
 	});	
 	
 }
